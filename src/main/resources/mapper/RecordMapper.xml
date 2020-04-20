@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdu.contract_management.mapper.RecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hdu.contract_management.entity.Record">
+        <id column="id" property="id" />
+        <result column="contract_id" property="contractId" />
+        <result column="name" property="name" />
+        <result column="type" property="type" />
+        <result column="number" property="number" />
+        <result column="time" property="time" />
+        <result column="more" property="more" />
+    </resultMap>
+
+    <select id="getMonthSale" resultType="java.util.LinkedHashMap">
+        select
+            sum(case when month(time)='1' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                   open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Jan,
+            sum(case when month(time)='2' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                   open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Feb,
+            sum(case when month(time)='3' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                   open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Mar,
+            sum(case when month(time) = '4' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Apr,
+            sum(case when month(time) = '5' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as May,
+            sum(case when month(time) = '6' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as June,
+            sum(case when month(time) = '7' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as July,
+            sum(case when month(time) = '8' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Aug,
+            sum(case when month(time) = '9' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Sept,
+            sum(case when month(time) = '10' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                      open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number  else 0 end) as Oct,
+            sum(case when month(time) = '11' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                      open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number  else 0 end) as Nov,
+            sum(case when month(time) = '12' and type = 0 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                      open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number  else 0 end) as Dece
+        from contract.record
+        where year(time)=#{toyear};
+
+    </select>
+    <select id="getMonthPurchase" parameterType="String" resultType="java.util.LinkedHashMap">
+        select
+            sum(case when month(time)='1' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                   open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Jan,
+            sum(case when month(time)='2' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                   open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Feb,
+            sum(case when month(time)='3' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                   open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Mar,
+            sum(case when month(time) = '4' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Apr,
+            sum(case when month(time) = '5' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as May,
+            sum(case when month(time) = '6' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as June,
+            sum(case when month(time) = '7' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as July,
+            sum(case when month(time) = '8' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Aug,
+            sum(case when month(time) = '9' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                     open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number else 0 end) as Sept,
+            sum(case when month(time) = '10' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                      open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number  else 0 end) as Oct,
+            sum(case when month(time) = '11' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                      open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number  else 0 end) as Nov,
+            sum(case when month(time) = '12' and type = 1 and contract_id in <foreach collection="contractList" item="id" index="index"
+                                                                                      open="(" close=")" separator=",">
+        #{id}
+    </foreach> then number  else 0 end) as Dece
+        from contract.record
+        where year(time)=#{toyear};
+
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, contract_id, name, type, number, time, more
+    </sql>
+
+</mapper>

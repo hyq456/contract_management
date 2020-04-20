@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdu.contract_management.mapper.ReviewMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hdu.contract_management.entity.Review">
+        <id column="id" property="id" />
+        <result column="contract_id" property="contractId" />
+        <result column="department_id" property="departmentId" />
+        <result column="review_comment" property="reviewComment" />
+        <result column="pass" property="pass" />
+        <result column="review_time" property="reviewTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, contract_id, department_id, review_comment, pass, review_time
+    </sql>
+
+</mapper>

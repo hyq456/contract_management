@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdu.contract_management.mapper.ReviewProgressMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hdu.contract_management.entity.ReviewProgress">
+        <id column="id" property="id" />
+        <result column="contract_id" property="contractId" />
+        <result column="next_department" property="nextDepartment" />
+        <result column="sub_time" property="subTime" />
+        <result column="contract_name" property="contractName" />
+        <result column="party_b" property="partyB" />
+        <result column="done" property="done" />
+        <result column="review_people" property="reviewPeople" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, contract_id, next_department, sub_time, contract_name, party_b, done, review_people, type
+    </sql>
+
+</mapper>
