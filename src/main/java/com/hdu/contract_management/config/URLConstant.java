@@ -40,4 +40,9 @@ public class URLConstant {
      * 注册企业回调接口url
      */
     public static final String REGISTER_CALLBACK = "https://oapi.dingtalk.com/call_back/register_call_back";
+    /**
+    * 发起待办事项接口url
+     */
+
+    public static final String URL_WORKRECORD_ADD = "https://oapi.dingtalk.com/topapi/workrecord/add";
 }

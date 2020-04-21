@@ -5,7 +5,9 @@ import com.hdu.contract_management.entity.Contract;
 import com.hdu.contract_management.entity.MailVo;
 import com.hdu.contract_management.entity.ReviewProgress;
 import com.hdu.contract_management.entity.User;
+import com.hdu.contract_management.entity.vo.WorkRecordVo;
 import com.hdu.contract_management.mapper.ReviewProgressMapper;
+import com.hdu.contract_management.service.DingdingService;
 import com.hdu.contract_management.service.MailService;
 import com.hdu.contract_management.service.ReviewProgressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -33,6 +35,8 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
     UserService userService;
     @Autowired
     MailService mailService;
+    @Autowired
+    DingdingService dingdingService;
 
     @Override
     public void increasePregressByContract(Contract contract) {
@@ -58,6 +62,10 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        //发送钉钉提醒
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        dingdingService.sendWorkRecord(workRecordVo);
+
         reviewProgress.setReviewPeople(user.getId());
         reviewProgressService.save(reviewProgress);
 
@@ -91,6 +99,10 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        //发送钉钉提醒
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        dingdingService.sendWorkRecord(workRecordVo);
+
         reviewProgress.setReviewPeople(user.getId());
         reviewProgressService.save(reviewProgress);
 
@@ -118,6 +130,10 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        //发送钉钉提醒
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        dingdingService.sendWorkRecord(workRecordVo);
+
         reviewProgress.setReviewPeople(user.getId());
         reviewProgressService.save(reviewProgress);
 
@@ -145,6 +161,10 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        //发送钉钉提醒
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        dingdingService.sendWorkRecord(workRecordVo);
+
         reviewProgress.setReviewPeople(user.getId());
         reviewProgressService.save(reviewProgress);
 
