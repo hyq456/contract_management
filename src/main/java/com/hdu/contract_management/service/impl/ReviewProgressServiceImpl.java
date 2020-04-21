@@ -44,8 +44,8 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         reviewProgress.setDone(false);
         reviewProgress.setContractId(contract.getId());
         reviewProgress.setType(1);
-        reviewProgressService.save(reviewProgress);
-        //给部门领导发邮件
+
+        //给分配审批人员并发邮件
         List<User> userList = userService.list(
                 new QueryWrapper<User>().eq("department", contract.getDepartment())
                         .eq("role", 2));
@@ -58,6 +58,9 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        reviewProgress.setReviewPeople(user.getId());
+        reviewProgressService.save(reviewProgress);
+
     }
 
     @Override
@@ -76,7 +79,6 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         ReviewProgress lastone = reviewProgressService.getOne(queryWrapper);
         reviewProgress.setNextDepartment(lastone.getNextDepartment());
         reviewProgress.setType(lastone.getType());
-        reviewProgressService.save(reviewProgress);
         List<User> userList = userService.list(
                 new QueryWrapper<User>().eq("department", lastone.getNextDepartment())
                         .eq("role", 2));
@@ -89,6 +91,9 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        reviewProgress.setReviewPeople(user.getId());
+        reviewProgressService.save(reviewProgress);
+
     }
 
     @Override
@@ -101,7 +106,6 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         reviewProgress.setDone(false);
         reviewProgress.setContractId(contract.getId());
         reviewProgress.setType(2);
-        reviewProgressService.save(reviewProgress);
         List<User> userList = userService.list(
                 new QueryWrapper<User>().eq("department", contract.getDepartment())
                         .eq("role", 2));
@@ -114,6 +118,9 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        reviewProgress.setReviewPeople(user.getId());
+        reviewProgressService.save(reviewProgress);
+
     }
 
     @Override
@@ -126,7 +133,6 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         reviewProgress.setDone(false);
         reviewProgress.setContractId(contract.getId());
         reviewProgress.setType(3);
-        reviewProgressService.save(reviewProgress);
         List<User> userList = userService.list(
                 new QueryWrapper<User>().eq("department", contract.getDepartment())
                         .eq("role", 2));
@@ -139,12 +145,13 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        reviewProgress.setReviewPeople(user.getId());
+        reviewProgressService.save(reviewProgress);
+
     }
 
     @Override
     public int waitApproveCount(Integer id) {
-        User user = userService.getById(id);
-        int count = reviewProgressService.count(new QueryWrapper<ReviewProgress>().eq("next_department", user.getDepartment()).eq("done",0));
-        return count;
+        return reviewProgressService.count(new QueryWrapper<ReviewProgress>().eq("review_people", id).eq("done",0));
     }
 }

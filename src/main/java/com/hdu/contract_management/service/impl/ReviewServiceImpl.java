@@ -56,14 +56,13 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
         reviewProgress.setDone(true);
         reviewProgress.setReviewPeople(review.getReviewPeople());
         reviewProgressService.updateById(reviewProgress);
-        if (review.getPass() == true) {
+        if (review.getPass()) {
             //当前审批部门为法务部
             if (reviewProgress.getNextDepartment() == 1) {
                 reviewProgress.setId(null);
                 reviewProgress.setDone(false);
                 reviewProgress.setNextDepartment(2);
                 reviewProgress.setSubTime(LocalDateTime.now());
-                reviewProgressService.save(reviewProgress);
                 //给财务部发邮件
                 Contract contract = contractService.getById(reviewProgress.getContractId());
                 List<User> userList = userService.list(
@@ -77,6 +76,9 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
                 mailVo.setSubject("新合同审批提醒");
                 mailVo.setContract(contract);
                 mailService.newApprove(mailVo);
+                reviewProgress.setReviewPeople(user.getId());
+                reviewProgressService.save(reviewProgress);
+
                 return true;
             }
             //当前审批部门为财务部,即审批流程完成
@@ -143,7 +145,6 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
                 //送往法务部审批
                 reviewProgress.setNextDepartment(1);
                 reviewProgress.setSubTime(LocalDateTime.now());
-                reviewProgressService.save(reviewProgress);
                 //给法务部发邮件
                 Contract contract = contractService.getById(reviewProgress.getContractId());
                 List<User> userList = userService.list(
@@ -157,6 +158,9 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
                 mailVo.setSubject("新合同审批提醒");
                 mailVo.setContract(contract);
                 mailService.newApprove(mailVo);
+                reviewProgress.setReviewPeople(user.getId());
+                reviewProgressService.save(reviewProgress);
+
                 return true;
             }
         }
