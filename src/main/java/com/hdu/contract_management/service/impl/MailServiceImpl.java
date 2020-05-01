@@ -79,7 +79,7 @@ public class MailServiceImpl implements MailService {
                     .append("<p>您有一份合同待审批，请前往系统查看</p>")
                     .append("<p>合同名："+mailVo.getContract().getName()+"</p>")
                     .append("<p>对方公司："+mailVo.getContract().getPartyB()+"</p>")
-                    .append("<p>合同金额："+mailVo.getContract().getTotal()+"</p>");
+                    .append("<p>合同金额："+mailVo.getContract().getTotal()+"元</p>");
             helper.setText(sb.toString(), true);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {

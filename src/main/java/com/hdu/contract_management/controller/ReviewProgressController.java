@@ -43,7 +43,7 @@ public class ReviewProgressController {
     public ResultUtil getReviewProgressByDepartment(HttpServletRequest request){
         Integer userId = Integer.parseInt(request.getParameter("userId"));
         QueryWrapper<ReviewProgress> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("sign_people",userId);
+        queryWrapper.eq("review_people",userId);
         queryWrapper.eq("done",0);
         return ResultUtil.success("查询审批进程成功",reviewProgressService.list(queryWrapper));
     }
