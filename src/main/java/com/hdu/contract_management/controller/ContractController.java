@@ -55,8 +55,8 @@ public class ContractController {
 
     @RequestMapping("/uploadContract")
     public ResultUtil uploadContractfile(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "contractId", required = false) Integer contractId) throws IOException {
-        String path = "";
-        String fileName = "";
+        String path;
+        String fileName;
         Contract contract = new Contract();
         if (contractId != null)
             contract = contractService.getById(contractId);
@@ -67,7 +67,7 @@ public class ContractController {
             fileName = file.getOriginalFilename();
             contract.setFilePath(fileName);
             contractService.saveOrUpdate(contract);
-            QueryWrapper<Contract> queryWrapper = new QueryWrapper<Contract>();
+            QueryWrapper<Contract> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("file_path", fileName);
             queryWrapper.last("LIMIT 1");
             queryWrapper.orderByDesc("id");
@@ -292,20 +292,20 @@ public class ContractController {
         List<Contract> list = contractService.list(queryWrapper);
         return ResultUtil.success("查询成功", list);
     }
-
-    @GetMapping("/waitreview")
-    public ResultUtil getWaitReviewContract(HttpServletRequest request) {
-        Integer department = Integer.parseInt(request.getParameter("department"));
-        List<ReviewProgress> list = reviewProgressService.list(new QueryWrapper<ReviewProgress>().eq("next_department", department));
-        if (list.size() == 0)
-            return ResultUtil.success("查询成功，但无数据");
-        List<Integer> idList = new ArrayList<>();
-        for (ReviewProgress r : list) {
-            idList.add(r.getContractId());
-        }
-        List<Contract> contracts = contractService.listByIds(idList);
-        return ResultUtil.success("查询成功", contracts);
-    }
+    //废除
+//    @GetMapping("/waitreview")
+//    public ResultUtil getWaitReviewContract(HttpServletRequest request) {
+//        Integer department = Integer.parseInt(request.getParameter("department"));
+//        List<ReviewProgress> list = reviewProgressService.list(new QueryWrapper<ReviewProgress>().eq("next_department", department));
+//        if (list.size() == 0)
+//            return ResultUtil.success("查询成功，但无数据");
+//        List<Integer> idList = new ArrayList<>();
+//        for (ReviewProgress r : list) {
+//            idList.add(r.getContractId());
+//        }
+//        List<Contract> contracts = contractService.listByIds(idList);
+//        return ResultUtil.success("查询成功", contracts);
+//    }
 
     @PostMapping("/file")
     public ResultUtil filingContract(Contract contract) {
@@ -323,13 +323,12 @@ public class ContractController {
     /**
      *
      * @param userId 用户id
-     * @return int approving 审批中合同数
-     * @return int waitApprove 待审批
-     * @return int execute 执行中
+     * @return int approving 审批中合同数 int waitApprove 待审批 int execute 执行中
+     *
      */
     @GetMapping("/contractnumber")
     public ResultUtil contractNumber(Integer userId){
-        QueryWrapper<Contract> wrapper = new QueryWrapper();
+        QueryWrapper<Contract> wrapper = new QueryWrapper<>();
         wrapper.eq("sign_people", userId);
         wrapper.eq("contract_state", 0);
         wrapper.or();

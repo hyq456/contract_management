@@ -5,7 +5,9 @@ import com.hdu.contract_management.entity.Contract;
 import com.hdu.contract_management.entity.MailVo;
 import com.hdu.contract_management.entity.ReviewProgress;
 import com.hdu.contract_management.entity.User;
+import com.hdu.contract_management.entity.vo.WorkRecordVo;
 import com.hdu.contract_management.mapper.ReviewProgressMapper;
+import com.hdu.contract_management.service.DingdingService;
 import com.hdu.contract_management.service.MailService;
 import com.hdu.contract_management.service.ReviewProgressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -33,6 +35,8 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
     UserService userService;
     @Autowired
     MailService mailService;
+    @Autowired
+    DingdingService dingdingService;
 
     @Override
     public void increasePregressByContract(Contract contract) {
@@ -44,8 +48,8 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         reviewProgress.setDone(false);
         reviewProgress.setContractId(contract.getId());
         reviewProgress.setType(1);
-        reviewProgressService.save(reviewProgress);
-        //给部门领导发邮件
+
+        //给分配审批人员并发邮件
         List<User> userList = userService.list(
                 new QueryWrapper<User>().eq("department", contract.getDepartment())
                         .eq("role", 2));
@@ -58,6 +62,13 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        //发送钉钉提醒
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        dingdingService.sendWorkRecord(workRecordVo);
+
+        reviewProgress.setReviewPeople(user.getId());
+        reviewProgressService.save(reviewProgress);
+
     }
 
     @Override
@@ -76,7 +87,6 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         ReviewProgress lastone = reviewProgressService.getOne(queryWrapper);
         reviewProgress.setNextDepartment(lastone.getNextDepartment());
         reviewProgress.setType(lastone.getType());
-        reviewProgressService.save(reviewProgress);
         List<User> userList = userService.list(
                 new QueryWrapper<User>().eq("department", lastone.getNextDepartment())
                         .eq("role", 2));
@@ -89,6 +99,13 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        //发送钉钉提醒
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        dingdingService.sendWorkRecord(workRecordVo);
+
+        reviewProgress.setReviewPeople(user.getId());
+        reviewProgressService.save(reviewProgress);
+
     }
 
     @Override
@@ -101,7 +118,6 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         reviewProgress.setDone(false);
         reviewProgress.setContractId(contract.getId());
         reviewProgress.setType(2);
-        reviewProgressService.save(reviewProgress);
         List<User> userList = userService.list(
                 new QueryWrapper<User>().eq("department", contract.getDepartment())
                         .eq("role", 2));
@@ -114,6 +130,13 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        //发送钉钉提醒
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        dingdingService.sendWorkRecord(workRecordVo);
+
+        reviewProgress.setReviewPeople(user.getId());
+        reviewProgressService.save(reviewProgress);
+
     }
 
     @Override
@@ -126,7 +149,6 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         reviewProgress.setDone(false);
         reviewProgress.setContractId(contract.getId());
         reviewProgress.setType(3);
-        reviewProgressService.save(reviewProgress);
         List<User> userList = userService.list(
                 new QueryWrapper<User>().eq("department", contract.getDepartment())
                         .eq("role", 2));
@@ -139,12 +161,17 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setSubject("新合同审批提醒");
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
+        //发送钉钉提醒
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        dingdingService.sendWorkRecord(workRecordVo);
+
+        reviewProgress.setReviewPeople(user.getId());
+        reviewProgressService.save(reviewProgress);
+
     }
 
     @Override
     public int waitApproveCount(Integer id) {
-        User user = userService.getById(id);
-        int count = reviewProgressService.count(new QueryWrapper<ReviewProgress>().eq("next_department", user.getDepartment()).eq("done",0));
-        return count;
+        return reviewProgressService.count(new QueryWrapper<ReviewProgress>().eq("review_people", id).eq("done",0));
     }
 }

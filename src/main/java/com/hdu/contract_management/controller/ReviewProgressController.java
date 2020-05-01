@@ -31,19 +31,19 @@ public class ReviewProgressController {
     @Autowired
     ReviewProgressService reviewProgressService;
 
-    @GetMapping("/{department}")
-    public ResultUtil getReviewProgressByDepartment(@PathVariable(value = "department") Integer department){
-        QueryWrapper<ReviewProgress> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("next_department",department);
-        queryWrapper.eq("done",false);
-        return ResultUtil.success("查询审批进程成功",reviewProgressService.list(queryWrapper));
-    }
+//    @GetMapping("/{department}")
+//    public ResultUtil getReviewProgressByDepartment(@PathVariable(value = "department") Integer department){
+//        QueryWrapper<ReviewProgress> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("next_department",department);
+//        queryWrapper.eq("done",false);
+//        return ResultUtil.success("查询审批进程成功",reviewProgressService.list(queryWrapper));
+//    }
 
     @GetMapping("/")
     public ResultUtil getReviewProgressByDepartment(HttpServletRequest request){
-        Integer departmentId = Integer.parseInt(request.getParameter("department"));
+        Integer userId = Integer.parseInt(request.getParameter("userId"));
         QueryWrapper<ReviewProgress> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("next_department",departmentId);
+        queryWrapper.eq("review_people",userId);
         queryWrapper.eq("done",0);
         return ResultUtil.success("查询审批进程成功",reviewProgressService.list(queryWrapper));
     }

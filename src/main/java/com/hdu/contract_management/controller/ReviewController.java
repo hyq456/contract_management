@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hdu.contract_management.entity.Contract;
 import com.hdu.contract_management.entity.Review;
 import com.hdu.contract_management.service.ContractService;
-import com.hdu.contract_management.service.ReviewProgressService;
 import com.hdu.contract_management.service.ReviewService;
 import com.hdu.contract_management.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +30,6 @@ public class ReviewController {
 
     @Autowired
     ReviewService reviewService;
-    @Autowired
-    ReviewProgressService reviewProgressService;
     @Autowired
     ContractService contractService;
 
@@ -72,7 +69,7 @@ public class ReviewController {
         wrapper.eq("review_people",reviewPeople);
         wrapper.orderByDesc("id");
         List<Review> list = reviewService.list(wrapper);
-        List result = new ArrayList();
+        List<Object> result = new ArrayList();
 
         for (Review review:list) {
             Map<String,Object> map = new HashMap<>();
