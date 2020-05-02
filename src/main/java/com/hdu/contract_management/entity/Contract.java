@@ -3,8 +3,9 @@ package com.hdu.contract_management.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.time.LocalDate;
+
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * <p>
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author hyq
- * @since 2020-03-22
+ * @since 2020-05-02
  */
 public class Contract extends Model<Contract> {
 
@@ -21,7 +22,7 @@ public class Contract extends Model<Contract> {
     /**
      * 合同ID
      */
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -40,7 +41,7 @@ public class Contract extends Model<Contract> {
     private Integer signPeople;
 
     /**
-     * 合同类型 1：销售 0：采购
+     * 合同类型  0：采购1：销售
      */
     private Integer contractType;
 
@@ -60,7 +61,7 @@ public class Contract extends Model<Contract> {
     private LocalDate stopDate;
 
     /**
-     * 合作状态： 1：审核中 2：执行中 3：已结束
+     * 合作状态： 0：被退回 1：审核中 2：执行中 3：已归档 4：已撤销 5：已提前终止
      */
     private Integer contractState;
 
@@ -75,11 +76,6 @@ public class Contract extends Model<Contract> {
     private Integer total;
 
     /**
-     * 剩余金额
-     */
-    private Integer remainder;
-
-    /**
      * 合同描述
      */
     private String contractDescribe;
@@ -88,6 +84,17 @@ public class Contract extends Model<Contract> {
      * 文件路径
      */
     private String filePath;
+
+    /**
+     * 待支付金额
+     */
+
+    private Integer remainder;
+
+    /**
+     * 未开票金额
+     */
+    private Integer unreceipt;
 
 
     public Integer getId() {
@@ -202,6 +209,14 @@ public class Contract extends Model<Contract> {
         this.remainder = remainder;
     }
 
+    public Integer getUnreceipt() {
+        return unreceipt;
+    }
+
+    public void setUnreceipt(Integer unreceipt) {
+        this.unreceipt = unreceipt;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -211,7 +226,7 @@ public class Contract extends Model<Contract> {
     public String toString() {
         return "Contract{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name=" + name +
                 ", department=" + department +
                 ", signPeople=" + signPeople +
                 ", contractType=" + contractType +
@@ -219,11 +234,12 @@ public class Contract extends Model<Contract> {
                 ", startDate=" + startDate +
                 ", stopDate=" + stopDate +
                 ", contractState=" + contractState +
-                ", partyB='" + partyB + '\'' +
+                ", partyB=" + partyB +
                 ", total=" + total +
+                ", contractDescribe=" + contractDescribe +
+                ", filePath=" + filePath +
                 ", remainder=" + remainder +
-                ", contractDescribe='" + contractDescribe + '\'' +
-                ", filePath='" + filePath + '\'' +
-                '}';
+                ", unreceipt=" + unreceipt +
+                "}";
     }
 }

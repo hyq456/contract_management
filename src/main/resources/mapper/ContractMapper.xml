@@ -4,19 +4,21 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.hdu.contract_management.entity.Contract">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="department" property="department" />
-        <result column="sign_people" property="signPeople" />
-        <result column="contract_type" property="contractType" />
-        <result column="sign_date" property="signDate" />
-        <result column="start_data" property="startData" />
-        <result column="stop_data" property="stopData" />
-        <result column="contract_state" property="contractState" />
-        <result column="party_b" property="partyB" />
-        <result column="total" property="total" />
-        <result column="contract_describe" property="contractDescribe" />
-        <result column="file_path" property="filePath" />
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="department" property="department"/>
+        <result column="sign_people" property="signPeople"/>
+        <result column="contract_type" property="contractType"/>
+        <result column="sign_date" property="signDate"/>
+        <result column="start_date" property="startDate"/>
+        <result column="stop_date" property="stopDate"/>
+        <result column="contract_state" property="contractState"/>
+        <result column="party_b" property="partyB"/>
+        <result column="total" property="total"/>
+        <result column="contract_describe" property="contractDescribe"/>
+        <result column="file_path" property="filePath"/>
+        <result column="remainder" property="remainder"/>
+        <result column="unreceipt" property="unreceipt"/>
     </resultMap>
 
     <select id="getExpire" resultType="com.hdu.contract_management.entity.Contract">
@@ -25,7 +27,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, department, sign_people, contract_type, sign_date, start_data, stop_data, contract_state, party_b, total, contract_describe, file_path
+        id, name, department, sign_people, contract_type, sign_date, start_date, stop_date, contract_state, party_b, total, contract_describe, file_path, remainder, unreceipt
     </sql>
 
 </mapper>
