@@ -8,15 +8,20 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author hyq
  * @since 2020-03-11
  */
 public interface UserService extends IService<User> {
-    public void trans(Integer id, String password);
-    public User selectUserByUsername(String username);
-    public String selectByName(String userName);
-    public Map getNameAndDepartmentById(Integer id);
-    }
+     void trans(Integer id, String password);
+
+     User selectUserByUsername(String username);
+
+     String selectByName(String userName);
+
+     Map getNameAndDepartmentById(Integer id);
+
+     Integer getRandomPeople(Integer departmentId, Boolean isLeader);
+}

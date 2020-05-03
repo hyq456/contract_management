@@ -12,5 +12,6 @@ import com.hdu.contract_management.entity.Receipt;
  * @since 2020-05-01
  */
 public interface ReceiptService extends IService<Receipt> {
+    boolean createReceipt(Receipt receipt);
 
 }

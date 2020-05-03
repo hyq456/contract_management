@@ -1,18 +1,19 @@
 package com.hdu.contract_management.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author hyq
- * @since 2020-03-30
+ * @since 2020-05-03
  */
 public class Record extends Model<Record> {
 
@@ -32,6 +33,11 @@ public class Record extends Model<Record> {
     private LocalDate time;
 
     private String more;
+
+    /**
+     * 发票状态 1：未申请 2：审核中 3：已完成
+     */
+    private Integer receipt;
 
 
     public Integer getId() {
@@ -90,6 +96,14 @@ public class Record extends Model<Record> {
         this.more = more;
     }
 
+    public Integer getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(Integer receipt) {
+        this.receipt = receipt;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -98,13 +112,14 @@ public class Record extends Model<Record> {
     @Override
     public String toString() {
         return "Record{" +
-        "id=" + id +
-        ", contractId=" + contractId +
-        ", name=" + name +
-        ", type=" + type +
-        ", number=" + number +
-        ", time=" + time +
-        ", more=" + more +
-        "}";
+                "id=" + id +
+                ", contractId=" + contractId +
+                ", name=" + name +
+                ", type=" + type +
+                ", number=" + number +
+                ", time=" + time +
+                ", more=" + more +
+                ", receipt=" + receipt +
+                "}";
     }
 }

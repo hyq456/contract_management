@@ -15,11 +15,13 @@
         <result column="record_id" property="recordId"/>
         <result column="notes" property="notes"/>
         <result column="finish" property="finish"/>
+        <result column="second_operator" property="secondOperator"/>
+        <result column="type" property="type"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, receipt_number, receipt_code, amount, partyB, receipt_name, receipt_date, operator, record_id, notes, finish
+        id, receipt_number, receipt_code, amount, partyB, receipt_name, receipt_date, operator, record_id, notes, finish, second_operator, type
     </sql>
 
 </mapper>

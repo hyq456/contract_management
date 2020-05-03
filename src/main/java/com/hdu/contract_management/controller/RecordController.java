@@ -37,17 +37,21 @@ public class RecordController {
     ContractService contractService;
 
     @GetMapping("/{id}")
-    public ResultUtil getRecordsByContractId(@PathVariable(value = "id") Integer contractId){
+    public ResultUtil getRecordsByContractId(@PathVariable(value = "id") Integer contractId) {
         List<Record> records = recordService.list(new QueryWrapper<Record>().eq("contract_id", contractId).orderByDesc("time"));
-        if(records != null){
-            return ResultUtil.success("查询履行记录成功",records);
-        }
-        else
+        if (records != null) {
+            return ResultUtil.success("查询履行记录成功", records);
+        } else
             return ResultUtil.error("查询履行记录失败");
     }
 
+    @GetMapping("")
+    public ResultUtil getRecord(Integer id) {
+        return ResultUtil.success("查询履行记录成功", recordService.getById(id));
+    }
+
     @PostMapping("/")
-    public ResultUtil newRecord(HttpServletRequest request){
+    public ResultUtil newRecord(HttpServletRequest request) {
         Record record = new Record();
         record.setContractId(Integer.parseInt(request.getParameter("contract_id")));
         record.setName(request.getParameter("name"));
@@ -57,15 +61,13 @@ public class RecordController {
         record.setMore(request.getParameter("more"));
         Contract contract = contractService.getById(record.getContractId());
         contract.setRemainder(contract.getRemainder() - record.getNumber());
-        if(contract.getRemainder()>=0){
+        if (contract.getRemainder() >= 0) {
             contractService.updateById(contract);
-            if(recordService.save(record)){
+            if (recordService.save(record)) {
                 return ResultUtil.success("新增记录成功");
-            }
-            else
+            } else
                 return ResultUtil.error("新增记录失败");
-        }
-        else
+        } else
             return ResultUtil.error("新增记录失败，输入金额大于待结算金额");
 
     }

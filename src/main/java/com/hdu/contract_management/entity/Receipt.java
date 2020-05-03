@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * <p>
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author hyq
- * @since 2020-05-01
+ * @since 2020-05-03
  */
 public class Receipt extends Model<Receipt> {
 
@@ -52,7 +53,8 @@ public class Receipt extends Model<Receipt> {
     /**
      * 开收票日期
      */
-    private LocalDateTime receiptDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate receiptDate;
 
     /**
      * 开票人员
@@ -73,6 +75,16 @@ public class Receipt extends Model<Receipt> {
      * 状态 0：未完成 1 已完成
      */
     private Boolean finish;
+
+    /**
+     * 第二审批人员，也就是部门负责人
+     */
+    private Integer secondOperator;
+
+    /**
+     * 0：开票 1：收票
+     */
+    private Integer type;
 
 
     public Integer getId() {
@@ -123,11 +135,11 @@ public class Receipt extends Model<Receipt> {
         this.receiptName = receiptName;
     }
 
-    public LocalDateTime getReceiptDate() {
+    public LocalDate getReceiptDate() {
         return receiptDate;
     }
 
-    public void setReceiptDate(LocalDateTime receiptDate) {
+    public void setReceiptDate(LocalDate receiptDate) {
         this.receiptDate = receiptDate;
     }
 
@@ -163,6 +175,22 @@ public class Receipt extends Model<Receipt> {
         this.finish = finish;
     }
 
+    public Integer getSecondOperator() {
+        return secondOperator;
+    }
+
+    public void setSecondOperator(Integer secondOperator) {
+        this.secondOperator = secondOperator;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -182,6 +210,8 @@ public class Receipt extends Model<Receipt> {
                 ", recordId=" + recordId +
                 ", notes=" + notes +
                 ", finish=" + finish +
+                ", secondOperator=" + secondOperator +
+                ", type=" + type +
                 "}";
     }
 }

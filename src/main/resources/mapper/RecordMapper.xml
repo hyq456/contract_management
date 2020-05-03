@@ -11,6 +11,7 @@
         <result column="number" property="number" />
         <result column="time" property="time" />
         <result column="more" property="more" />
+        <result column="receipt" property="receipt"/>
     </resultMap>
 
     <select id="getMonthSale" resultType="java.util.LinkedHashMap">
@@ -124,7 +125,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, contract_id, name, type, number, time, more
+        id, contract_id, name, type, number, time, more, receipt
     </sql>
 
 </mapper>
