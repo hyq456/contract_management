@@ -13,6 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.ws.Action;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.ObjIntConsumer;
 
 /**
  * <p>
@@ -43,7 +48,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, Receipt> impl
             Contract contract = contractService.getById(record.getContractId());
             Integer secondOperator = userService.getRandomPeople(contract.getDepartment(), true);
             receipt.setSecondOperator(secondOperator);
-            receipt.setType(1);
+            receipt.setType(0);
             receiptService.save(receipt);
             record.setReceipt(2);
             recordService.updateById(record);
@@ -61,6 +66,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, Receipt> impl
         } else { // 付款 收发票
             Integer operator = userService.getRandomPeople(1, false);
             receipt.setOperator(operator);
+            receipt.setType(1);
             receiptService.save(receipt);
             record.setReceipt(2);
             recordService.updateById(record);
@@ -75,5 +81,25 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, Receipt> impl
 
         }
         return true;
+    }
+
+    @Override
+    public List getReceipt(Integer userId) {
+        List<Receipt> receiptList = receiptService.list(new QueryWrapper<Receipt>()
+                .eq("belong", userId)
+                .orderByDesc("id"));
+        ArrayList arrayList = new ArrayList();
+        for (Receipt r : receiptList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("receiptName", r.getReceiptName());
+            Record record = recordService.getById(r.getRecordId());
+            Contract contract = contractService.getById(record.getContractId());
+            map.put("contractName", contract.getName());
+            map.put("receiptID", r.getId());
+            map.put("receiptType", r.getType());
+            map.put("status", r.getFinish());
+            arrayList.add(map);
+        }
+        return arrayList;
     }
 }

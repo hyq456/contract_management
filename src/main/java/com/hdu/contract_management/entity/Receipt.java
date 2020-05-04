@@ -86,6 +86,14 @@ public class Receipt extends Model<Receipt> {
      */
     private Integer type;
 
+    /**
+     * 合同经办人id
+     */
+    private Integer belong;
+    /**
+     * 归属合同ID
+     */
+    private Integer contractId;
 
     public Integer getId() {
         return id;
@@ -191,6 +199,22 @@ public class Receipt extends Model<Receipt> {
         this.type = type;
     }
 
+    public Integer getBelong() {
+        return belong;
+    }
+
+    public Integer getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(Integer contractId) {
+        this.contractId = contractId;
+    }
+
+    public void setBelong(Integer belong) {
+        this.belong = belong;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -203,15 +227,17 @@ public class Receipt extends Model<Receipt> {
                 ", receiptNumber=" + receiptNumber +
                 ", receiptCode=" + receiptCode +
                 ", amount=" + amount +
-                ", partyB=" + partyB +
-                ", receiptName=" + receiptName +
+                ", partyB='" + partyB + '\'' +
+                ", receiptName='" + receiptName + '\'' +
                 ", receiptDate=" + receiptDate +
                 ", operator=" + operator +
                 ", recordId=" + recordId +
-                ", notes=" + notes +
+                ", notes='" + notes + '\'' +
                 ", finish=" + finish +
                 ", secondOperator=" + secondOperator +
                 ", type=" + type +
-                "}";
+                ", belong=" + belong +
+                ", contractId=" + contractId +
+                '}';
     }
 }

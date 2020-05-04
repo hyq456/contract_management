@@ -30,12 +30,6 @@ import java.util.Date;
 public class ReceiptController {
     @Autowired
     ReceiptService receiptService;
-    @Autowired
-    UserService userService;
-    @Autowired
-    RecordService recordService;
-    @Autowired
-    ContractService contractService;
 
     @PostMapping("")
     public ResultUtil createReceipt(Receipt receipt) {
@@ -43,5 +37,16 @@ public class ReceiptController {
         System.out.println(receipt.toString());
         return ResultUtil.success("新增发票申请成功");
     }
+
+    @GetMapping("")
+    public ResultUtil getReceiptList(Integer userId) {
+        return ResultUtil.success("查询发票列表成功", receiptService.getReceipt(userId));
+    }
+
+    @GetMapping("/")
+    public ResultUtil getReceipt(Integer receiptId) {
+        return ResultUtil.success("查询发票信息成功", receiptService.getById(receiptId));
+    }
+
 }
 
