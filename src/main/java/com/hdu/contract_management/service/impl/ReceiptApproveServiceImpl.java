@@ -82,4 +82,22 @@ public class ReceiptApproveServiceImpl extends ServiceImpl<ReceiptApproveMapper,
                 .set("operator", operator));
 
     }
+
+    @Override
+    public void financeFinish(Integer approveId, Receipt receipt) {
+        ReceiptApprove approve = approveService.getById(approveId);
+        approve.setFinish(true);
+        approveService.updateById(approve);
+        Receipt oldReceipt = receiptService.getById(approve.getReceiptId());
+        if (oldReceipt.getReceiptCode() == null) {
+            oldReceipt.setReceiptCode(receipt.getReceiptCode());
+            oldReceipt.setReceiptNumber(receipt.getReceiptNumber());
+            oldReceipt.setReceiptDate(receipt.getReceiptDate());
+        }
+        oldReceipt.setFinish(true);
+        receiptService.updateById(oldReceipt);
+        Contract contract = contractService.getById(oldReceipt.getContractId());
+        contract.setUnreceipt(contract.getUnreceipt() - oldReceipt.getAmount());
+        contractService.updateById(contract);
+    }
 }

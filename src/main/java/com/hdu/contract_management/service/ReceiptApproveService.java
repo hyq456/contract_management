@@ -21,4 +21,6 @@ public interface ReceiptApproveService extends IService<ReceiptApprove> {
     List getReceiptApproveList(Integer userId);
 
     void leaderFinish(Integer approveId);
+
+    void financeFinish(Integer approveId, Receipt receipt);
 }

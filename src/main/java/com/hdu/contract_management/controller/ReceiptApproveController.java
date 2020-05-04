@@ -11,6 +11,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.PublicKey;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,14 +44,23 @@ public class ReceiptApproveController {
         return ResultUtil.success("查询待审批发票列表成功", approveService.getReceiptApproveList(userId));
     }
 
-    @PostMapping("")
-    public ResultUtil leaderFinishApprove(@RequestParam(required = false) Receipt receipt,
-                                          Integer approveId) {
-        if (receipt == null) {
-            approveService.leaderFinish(approveId);
-            return ResultUtil.success("负责人发票审批完成");
-        }
-        return null;
+    @PostMapping("/leader")
+    public ResultUtil leaderFinishApprove(Integer approveId) {
+        approveService.leaderFinish(approveId);
+        return ResultUtil.success("负责人发票审批完成");
+    }
+
+    @PostMapping("/finance")
+    public ResultUtil financeFinishApprove(Integer approveId, Integer receiptNumber,
+                                           Integer receiptCode, String receiptDate) {
+        LocalDate date =
+                LocalDate.parse(receiptDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Receipt receipt = new Receipt();
+        receipt.setReceiptNumber(receiptNumber);
+        receipt.setReceiptCode(receiptCode);
+        receipt.setReceiptDate(date);
+        approveService.financeFinish(approveId, receipt);
+        return ResultUtil.success("财务部发票审批完成");
     }
 }
 
