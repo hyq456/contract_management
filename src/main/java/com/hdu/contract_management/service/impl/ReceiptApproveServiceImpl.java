@@ -109,7 +109,7 @@ public class ReceiptApproveServiceImpl extends ServiceImpl<ReceiptApproveMapper,
         //发送钉钉提醒
         User user = userService.getById(contract.getSignPeople());
         WorkRecordVo workRecordVo =
-                new WorkRecordVo("有一份发票已完成审批", "名称", contract.getName() + receipt.getReceiptName(), user);
+                new WorkRecordVo("有一份发票已完成审批", "名称", contract.getName() + oldReceipt.getReceiptName(), user);
         dingdingService.sendWorkRecord(workRecordVo);
     }
 }
