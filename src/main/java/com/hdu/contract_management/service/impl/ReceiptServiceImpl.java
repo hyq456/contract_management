@@ -3,10 +3,8 @@ package com.hdu.contract_management.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hdu.contract_management.entity.Contract;
-import com.hdu.contract_management.entity.Receipt;
-import com.hdu.contract_management.entity.ReceiptApprove;
-import com.hdu.contract_management.entity.Record;
+import com.hdu.contract_management.entity.*;
+import com.hdu.contract_management.entity.vo.WorkRecordVo;
 import com.hdu.contract_management.mapper.ReceiptMapper;
 import com.hdu.contract_management.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,8 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, Receipt> impl
     ReceiptService receiptService;
     @Autowired
     ReceiptApproveService approveService;
+    @Autowired
+    DingdingService dingdingService;
 
     @Override
     public boolean createReceipt(Receipt receipt) {
@@ -62,7 +62,11 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, Receipt> impl
             receiptApprove.setApprovePeople(secondOperator);
             receiptApprove.setReceiptId(receipt.getId());
             approveService.save(receiptApprove);
-            // TODO: 2020/5/3 发通知
+            //发送钉钉提醒
+            User user = userService.getById(secondOperator);
+            WorkRecordVo workRecordVo =
+                    new WorkRecordVo("有一份发票待审批", "名称", contract.getName() + receipt.getReceiptName(), user);
+            dingdingService.sendWorkRecord(workRecordVo);
         } else { // 付款 收发票
             Integer operator = userService.getRandomPeople(1, false);
             receipt.setOperator(operator);
@@ -77,8 +81,12 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, Receipt> impl
             receiptApprove.setApprovePeople(operator);
             receiptApprove.setReceiptId(receipt.getId());
             approveService.save(receiptApprove);
-            // TODO: 2020/5/3 发通知
-
+            //发送钉钉提醒
+            Contract contract = contractService.getById(record.getContractId());
+            User user = userService.getById(operator);
+            WorkRecordVo workRecordVo =
+                    new WorkRecordVo("有一份发票待审批", "名称", contract.getName() + receipt.getReceiptName(), user);
+            dingdingService.sendWorkRecord(workRecordVo);
         }
         return true;
     }
