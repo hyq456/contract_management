@@ -8,10 +8,7 @@ import com.hdu.contract_management.entity.Receipt;
 import com.hdu.contract_management.entity.ReceiptApprove;
 import com.hdu.contract_management.entity.Record;
 import com.hdu.contract_management.mapper.ReceiptApproveMapper;
-import com.hdu.contract_management.service.ContractService;
-import com.hdu.contract_management.service.ReceiptApproveService;
-import com.hdu.contract_management.service.ReceiptService;
-import com.hdu.contract_management.service.UserService;
+import com.hdu.contract_management.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +35,8 @@ public class ReceiptApproveServiceImpl extends ServiceImpl<ReceiptApproveMapper,
     ContractService contractService;
     @Autowired
     UserService userService;
+    @Autowired
+    RecordService recordService;
 
     @Override
     public boolean createAndInfo(Receipt receipt) {
@@ -99,5 +98,7 @@ public class ReceiptApproveServiceImpl extends ServiceImpl<ReceiptApproveMapper,
         Contract contract = contractService.getById(oldReceipt.getContractId());
         contract.setUnreceipt(contract.getUnreceipt() - oldReceipt.getAmount());
         contractService.updateById(contract);
+        recordService.update(new UpdateWrapper<Record>().eq("id", oldReceipt.getRecordId())
+                .set("receipt", 3));
     }
 }

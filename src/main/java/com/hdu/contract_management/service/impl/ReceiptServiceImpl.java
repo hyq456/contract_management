@@ -102,4 +102,27 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, Receipt> impl
         }
         return arrayList;
     }
+
+    @Override
+    public List getApproved(Integer userId) {
+        List<ReceiptApprove> approves =
+                approveService.list(new QueryWrapper<ReceiptApprove>().eq("approve_people", userId));
+        List<Integer> tmp = new ArrayList<>();
+        for (ReceiptApprove a : approves) {
+            tmp.add(a.getReceiptId());
+        }
+        List<Receipt> receiptList = receiptService.listByIds(tmp);
+        ArrayList arrayList = new ArrayList();
+        for (Receipt r : receiptList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("receiptName", r.getReceiptName());
+            Record record = recordService.getById(r.getRecordId());
+            Contract contract = contractService.getById(record.getContractId());
+            map.put("contractName", contract.getName());
+            map.put("receiptID", r.getId());
+            map.put("receiptType", r.getType());
+            arrayList.add(map);
+        }
+        return arrayList;
+    }
 }

@@ -17,4 +17,6 @@ public interface ReceiptService extends IService<Receipt> {
     boolean createReceipt(Receipt receipt);
 
     List getReceipt(Integer userId);
+
+    List getApproved(Integer userId);
 }

@@ -48,5 +48,10 @@ public class ReceiptController {
         return ResultUtil.success("查询发票信息成功", receiptService.getById(receiptId));
     }
 
+    @GetMapping("/myapproved")
+    public ResultUtil getMyApproved(Integer userId) {
+        return ResultUtil.success("查询已审批发票信息成功", receiptService.getApproved(userId));
+    }
+
 }
 
