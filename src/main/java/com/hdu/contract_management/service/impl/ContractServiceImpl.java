@@ -44,68 +44,86 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
     @Override
     public Map<String, Object> getSaleDate(Integer userId) {
         QueryWrapper<Contract> wrapper = new QueryWrapper<>();
-        wrapper.eq("sign_people",userId);
-        wrapper.eq("contract_state",2);
-        wrapper.eq("contract_type",1);
+        wrapper.eq("sign_people", userId);
+        wrapper.eq("contract_state", 2);
+        wrapper.eq("contract_type", 1);
         List<Contract> contracts = contractService.list(wrapper);
         //总
         int total = 0;
         //未完成
         int todo = 0;
+        //未开票
+        int unreceipt = 0;
         List totalList = new ArrayList();
         List todoList = new ArrayList();
-        for (Contract c:contracts) {
+        List unreceiptList = new ArrayList();
+        for (Contract c : contracts) {
             total += c.getTotal();
             todo += c.getRemainder();
-            Map<String,Object> totalMap = new HashMap<>();
-            totalMap.put("value",c.getTotal());
-            totalMap.put("name",c.getName());
+            unreceipt += c.getUnreceipt();
+            Map<String, Object> totalMap = new HashMap<>();
+            totalMap.put("value", c.getTotal());
+            totalMap.put("name", c.getName());
             totalList.add(totalMap);
-            Map<String,Object> todoMap = new HashMap<>();
-            todoMap.put("value",c.getRemainder());
-            todoMap.put("name",c.getName());
+            Map<String, Object> todoMap = new HashMap<>();
+            todoMap.put("value", c.getRemainder());
+            todoMap.put("name", c.getName());
             todoList.add(todoMap);
+            Map<String, Object> unreceiptMap = new HashMap<>();
+            unreceiptMap.put("value", c.getUnreceipt());
+            unreceiptMap.put("name", c.getName());
+            unreceiptList.add(unreceiptMap);
         }
-        Map<String,Object> result = new HashMap<>();
-        result.put("total",total);
-        result.put("todo",todo);
-        result.put("totalList",totalList);
-        result.put("todoList",todoList);
-
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", total);
+        result.put("todo", todo);
+        result.put("unreceipt", unreceipt);
+        result.put("totalList", totalList);
+        result.put("todoList", todoList);
+        result.put("unreceiptList", unreceiptList);
         return result;
     }
 
     @Override
     public Map<String, Object> getPurchaseDate(Integer userId) {
         QueryWrapper<Contract> wrapper = new QueryWrapper<>();
-        wrapper.eq("sign_people",userId);
-        wrapper.eq("contract_state",2);
-        wrapper.eq("contract_type",0);
+        wrapper.eq("sign_people", userId);
+        wrapper.eq("contract_state", 2);
+        wrapper.eq("contract_type", 0);
         List<Contract> contracts = contractService.list(wrapper);
         //总
         int total = 0;
         //未完成
         int todo = 0;
+        //未开票
+        int unreceipt = 0;
         List totalList = new ArrayList();
         List todoList = new ArrayList();
-        for (Contract c:contracts) {
+        List unreceiptList = new ArrayList();
+        for (Contract c : contracts) {
             total += c.getTotal();
             todo += c.getRemainder();
-            Map<String,Object> totalMap = new HashMap<>();
-            totalMap.put("value",c.getTotal());
-            totalMap.put("name",c.getName());
+            unreceipt += c.getUnreceipt();
+            Map<String, Object> totalMap = new HashMap<>();
+            totalMap.put("value", c.getTotal());
+            totalMap.put("name", c.getName());
             totalList.add(totalMap);
-            Map<String,Object> todoMap = new HashMap<>();
-            todoMap.put("value",c.getRemainder());
-            todoMap.put("name",c.getName());
+            Map<String, Object> todoMap = new HashMap<>();
+            todoMap.put("value", c.getRemainder());
+            todoMap.put("name", c.getName());
             todoList.add(todoMap);
+            Map<String, Object> unreceiptMap = new HashMap<>();
+            unreceiptMap.put("value", c.getUnreceipt());
+            unreceiptMap.put("name", c.getName());
+            unreceiptList.add(unreceiptMap);
         }
-        Map<String,Object> result = new HashMap<>();
-        result.put("total",total);
-        result.put("todo",todo);
-        result.put("totalList",totalList);
-        result.put("todoList",todoList);
-
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", total);
+        result.put("todo", todo);
+        result.put("unreceipt", unreceipt);
+        result.put("totalList", totalList);
+        result.put("todoList", todoList);
+        result.put("unreceiptList", unreceiptList);
         return result;
     }
 

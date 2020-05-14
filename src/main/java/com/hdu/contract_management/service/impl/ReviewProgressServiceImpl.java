@@ -63,7 +63,7 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         mailVo.setContract(contract);
         mailService.newApprove(mailVo);
         //发送钉钉提醒
-        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
+        WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批", "合同名", contract.getName(), user);
         dingdingService.sendWorkRecord(workRecordVo);
 
         reviewProgress.setReviewPeople(user.getId());
@@ -71,6 +71,9 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
 
     }
 
+    /**
+     * @param contract 合同对象
+     */
     @Override
     public void increasePregressByModifyContract(Contract contract) {
         ReviewProgress reviewProgress = new ReviewProgress();
@@ -102,7 +105,6 @@ public class ReviewProgressServiceImpl extends ServiceImpl<ReviewProgressMapper,
         //发送钉钉提醒
         WorkRecordVo workRecordVo = new WorkRecordVo("有一份合同待审批","合同名",contract.getName(),user);
         dingdingService.sendWorkRecord(workRecordVo);
-
         reviewProgress.setReviewPeople(user.getId());
         reviewProgressService.save(reviewProgress);
 

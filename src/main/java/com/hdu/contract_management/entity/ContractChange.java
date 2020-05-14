@@ -90,6 +90,7 @@ public class ContractChange extends Model<ContractChange> {
     private String filePath;
 
     private Integer remainder;
+    private Integer unreceipt;
 
     /**
      * 1:合同变更 2：合同终止
@@ -238,6 +239,14 @@ public class ContractChange extends Model<ContractChange> {
         this.changeDescribe = changeDescribe;
     }
 
+    public Integer getUnreceipt() {
+        return unreceipt;
+    }
+
+    public void setUnreceipt(Integer unreceipt) {
+        this.unreceipt = unreceipt;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -246,17 +255,17 @@ public class ContractChange extends Model<ContractChange> {
     @Override
     public String toString() {
         return "ContractChange{" +
-        "id=" + id +
-        ", contractId=" + contractId +
-        ", name=" + name +
-        ", department=" + department +
-        ", signPeople=" + signPeople +
-        ", contractType=" + contractType +
-        ", signDate=" + signDate +
-        ", startDate=" + startDate +
-        ", stopDate=" + stopDate +
-        ", contractState=" + contractState +
-        ", partyB=" + partyB +
+                "id=" + id +
+                ", contractId=" + contractId +
+                ", name=" + name +
+                ", department=" + department +
+                ", signPeople=" + signPeople +
+                ", contractType=" + contractType +
+                ", signDate=" + signDate +
+                ", startDate=" + startDate +
+                ", stopDate=" + stopDate +
+                ", contractState=" + contractState +
+                ", partyB=" + partyB +
         ", total=" + total +
         ", contractDescribe=" + contractDescribe +
         ", filePath=" + filePath +

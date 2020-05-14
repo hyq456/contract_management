@@ -14,8 +14,10 @@ import java.util.List;
  * @since 2020-03-27
  */
 public interface ReviewService extends IService<Review> {
-//    public List<Review> getReviewsByContractId(Integer contractId);
-public int reviewCount(Integer contractId);
+    //    public List<Review> getReviewsByContractId(Integer contractId);
+    int reviewCount(Integer contractId);
 
-public Boolean increaseReview(Review review);
+    Boolean increaseReview(Review review);
+
+    List<Review> getReview(Integer contractId);
 }

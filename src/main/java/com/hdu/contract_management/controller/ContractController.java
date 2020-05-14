@@ -53,6 +53,12 @@ public class ContractController {
     @Value("${prop.upload-folder}")
     private String UPLOAD_FOLDER;
 
+    /**
+     * @param file       合同文件
+     * @param contractId 合同id
+     * @return 合同名，合同对象
+     * @throws IOException io异常
+     */
     @RequestMapping("/uploadContract")
     public ResultUtil uploadContractfile(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "contractId", required = false) Integer contractId) throws IOException {
         String path;
@@ -81,14 +87,10 @@ public class ContractController {
                 //以原来的名称命名,覆盖掉旧的
                 System.out.println("上传的文件：" + fileName + "," + "，保存的路径为：" + fileDir);
                 file.transferTo(fileDir);
-                //或者下面的
-                // Path path = Paths.get(storagePath);
-                //Files.write(path,multipartFiles[i].getBytes());
             } catch (Exception e) {
                 return ResultUtil.error(e.getMessage());
             }
         }
-
         return ResultUtil.success(fileName, contract);
     }
 
@@ -177,6 +179,7 @@ public class ContractController {
         contract.setContractDescribe(request.getParameter("describe"));
         contract.setStartDate(LocalDate.parse(request.getParameter("start_date"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         contract.setStopDate(LocalDate.parse(request.getParameter("stop_date"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        contract.setUnreceipt(Integer.parseInt(request.getParameter("total")));
         contract.setContractState(1);
         System.out.println(contract.toString());
         if (contractService.saveOrUpdate(contract)) {

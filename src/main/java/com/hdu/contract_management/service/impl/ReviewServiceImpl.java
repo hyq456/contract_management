@@ -6,11 +6,13 @@ import com.hdu.contract_management.entity.vo.WorkRecordVo;
 import com.hdu.contract_management.mapper.ReviewMapper;
 import com.hdu.contract_management.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hdu.contract_management.utils.ResultUtil;
 import net.sf.jsqlparser.expression.operators.arithmetic.Concat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -49,16 +51,37 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
 
     @Override
     public Boolean increaseReview(Review review) {
-        review.setReviewTime(LocalDateTime.now());
-        reviewService.save(review);
         QueryWrapper<ReviewProgress> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("contract_id", review.getContractId());
         queryWrapper.orderByDesc("id");
+        queryWrapper.isNotNull("review_id");
         queryWrapper.last("limit 1");
+        ReviewProgress last = reviewProgressService.getOne(queryWrapper);
+        if (last != null) {
+            Review lastReview = reviewService.getById(last.getReviewId());
+            if (!lastReview.getPass()) {
+                review.setId(lastReview.getId());
+            }
+        }
+
+        review.setReviewTime(LocalDateTime.now());
+        reviewService.saveOrUpdate(review);
+        QueryWrapper<Review> wrapper = new QueryWrapper();
+        wrapper.eq("contract_id", review.getContractId());
+        wrapper.orderByDesc("id");
+        wrapper.last("limit 1");
+        review = reviewService.getOne(wrapper);
+        queryWrapper.clear();
+        queryWrapper.eq("contract_id", review.getContractId());
+        queryWrapper.orderByDesc("id");
+        queryWrapper.last("limit 1");
+
         ReviewProgress reviewProgress = reviewProgressService.getOne(queryWrapper);
         reviewProgress.setDone(true);
         reviewProgress.setReviewPeople(review.getReviewPeople());
+        reviewProgress.setReviewId(review.getId());
         reviewProgressService.updateById(reviewProgress);
+
         if (review.getPass()) {
             //当前审批部门为法务部
             if (reviewProgress.getNextDepartment() == 1) {
@@ -186,7 +209,6 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
         }
         //若是审批未通过
         else {
-            //当前审批部门为法务部
             Contract contract = contractService.getById(review.getContractId());
             contract.setContractState(0);
             contractService.updateById(contract);
@@ -197,12 +219,31 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
             mailVo.setToName(user.getRealname());
             mailVo.setSubject("合同审批被退回提醒");
             mailVo.setContract(contract);
-            mailVo.setText("您有一份合同审批被退回，原因是："+review.getReviewComment());
+            mailVo.setText("您有一份合同审批被退回，原因是：" + review.getReviewComment());
             mailService.remind(mailVo);
             //发送钉钉提醒
-            WorkRecordVo workRecordVo = new WorkRecordVo("您有一份审批被退回","合同名",contract.getName(),user);
+            WorkRecordVo workRecordVo = new WorkRecordVo("您有一份审批被退回", "合同名", contract.getName(), user);
             dingdingService.sendWorkRecord(workRecordVo);
             return true;
         }
+    }
+
+    @Override
+    public List<Review> getReview(Integer contractId) {
+        QueryWrapper<ReviewProgress> wrapper = new QueryWrapper<>();
+        wrapper.eq("contract_id", contractId);
+        wrapper.orderByDesc("id");
+        wrapper.last("limit 1");
+
+        Integer type = reviewProgressService.getOne(wrapper).getType();
+        wrapper.clear();
+        wrapper.eq("contract_id", contractId);
+        wrapper.eq("type", type);
+        List<ReviewProgress> list1 = reviewProgressService.list(wrapper);
+        List<Integer> ids = new ArrayList<>();
+        for (ReviewProgress r : list1) {
+            ids.add(r.getReviewId());
+        }
+        return reviewService.listByIds(ids);
     }
 }

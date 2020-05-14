@@ -66,11 +66,13 @@ public class ContractChangeController {
         Contract contract = contractService.getById(contractChange.getContractId());
 
         contractChange.setRemainder(contract.getRemainder());
+        contractChange.setUnreceipt(contract.getUnreceipt());
+
         UpdateWrapper<Contract> wrapper = new UpdateWrapper<>();
-        wrapper.eq("id",contract.getId()).set("contract_state",1);
+        wrapper.eq("id", contract.getId()).set("contract_state", 1);
         contractService.update(wrapper);
         reviewProgressService.increaseProgressByChangeContract(contract);
-        if(contractChangeService.save(contractChange))
+        if (contractChangeService.save(contractChange))
 
             return ResultUtil.success("保存合同变更成功");
         else

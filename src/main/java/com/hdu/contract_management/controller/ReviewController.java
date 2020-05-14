@@ -36,14 +36,10 @@ public class ReviewController {
 
     @GetMapping("/{id}")
     public ResultUtil getReviewById(@PathVariable(value = "id") Integer id){
-        QueryWrapper<Review> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("contract_id",id);
-        List<Review> list = reviewService.list(queryWrapper);
-        if(list!=null){
-            return ResultUtil.success("查询成功",list);
-        }
-        else
-            return ResultUtil.error("查询失败");
+
+
+        return ResultUtil.success("查询成功", reviewService.getReview(id));
+
     }
 
     @GetMapping({"/getreview/{id}"})

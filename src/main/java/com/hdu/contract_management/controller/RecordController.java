@@ -73,16 +73,29 @@ public class RecordController {
     }
 
     @GetMapping("/getMonthRecord")
-    public ResultUtil getMonthRecord(@RequestParam(value ="toyear",required = false,defaultValue = "2020")String year,
+    public ResultUtil getMonthRecord(@RequestParam(value = "toyear", required = false, defaultValue = "2020") String year,
 
-                                    @RequestParam(value="id")Integer id){
-        LinkedHashMap monthSale = recordService.getMonthSale(year,id);
-        LinkedHashMap monthPurchase = recordService.getMonthPurchase(year,id);
-        HashMap<String,Object> hashMap = new HashMap<>();
-        hashMap.put("monthSale",monthSale.values());
-        hashMap.put("monthPurchase",monthPurchase.values());
-        return ResultUtil.success("查询每月记录成功",hashMap);
+                                     @RequestParam(value = "id") Integer id) {
+        LinkedHashMap monthSale = recordService.getMonthSale(year, id);
+        LinkedHashMap monthPurchase = recordService.getMonthPurchase(year, id);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("monthSale", monthSale.values());
+        hashMap.put("monthPurchase", monthPurchase.values());
+        return ResultUtil.success("查询每月记录成功", hashMap);
     }
 
+    /**
+     * 合同变更前查看是否有审批中发票
+     *
+     * @param contractId 合同id
+     * @return 审批中发票数量
+     */
+    @GetMapping("/ifApproving")
+    public ResultUtil ifApproving(Integer contractId) {
+        QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("contract_id", contractId);
+        queryWrapper.eq("receipt", 2);
+        return ResultUtil.success("审批中发票数量为", recordService.count(queryWrapper));
+    }
 }
 

@@ -48,6 +48,7 @@ public class ReviewProgress extends Model<ReviewProgress> {
      * 1:新增合同 2：合同变更 3：提前终止
      */
     private Integer type;
+    private Integer reviewId;
 
 
     public Integer getId() {
@@ -122,6 +123,14 @@ public class ReviewProgress extends Model<ReviewProgress> {
         this.type = type;
     }
 
+    public Integer getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(Integer reviewId) {
+        this.reviewId = reviewId;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -130,15 +139,16 @@ public class ReviewProgress extends Model<ReviewProgress> {
     @Override
     public String toString() {
         return "ReviewProgress{" +
-        "id=" + id +
-        ", contractId=" + contractId +
-        ", nextDepartment=" + nextDepartment +
-        ", subTime=" + subTime +
-        ", contractName=" + contractName +
-        ", partyB=" + partyB +
-        ", done=" + done +
-        ", reviewPeople=" + reviewPeople +
-        ", type=" + type +
-        "}";
+                "id=" + id +
+                ", contractId=" + contractId +
+                ", nextDepartment=" + nextDepartment +
+                ", subTime=" + subTime +
+                ", contractName='" + contractName + '\'' +
+                ", partyB='" + partyB + '\'' +
+                ", done=" + done +
+                ", reviewPeople=" + reviewPeople +
+                ", type=" + type +
+                ", reviewId=" + reviewId +
+                '}';
     }
 }

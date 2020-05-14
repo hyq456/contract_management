@@ -71,9 +71,6 @@ public class TemplateController {
                 String picPath = officeUtil.wordTopng(TEMPLATE_FOLDER, newFileName);
                 template.setPicpath("img" + File.separator + picPath);
                 templateService.save(template);
-                //或者下面的
-                // Path path = Paths.get(storagePath);
-                //Files.write(path,multipartFiles[i].getBytes());
             } catch (Exception e) {
                 return ResultUtil.error(e.getMessage());
             }

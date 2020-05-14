@@ -20,23 +20,19 @@ public class LoginController {
 
     @RequestMapping("/auth")
     public Map<String, Object> login(HttpServletRequest request) {
-
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        System.out.println("username:" + username + "       password:" + password);
+        //准备返回结果容器
         Map<String, Object> result = new HashMap<>();
         result.put("code", 404);
         result.put("msg", "登录失败");
-
         // 从SecurityUtils里边创建一个 subject
         Subject subject = getSubject();
         // 在认证提交前准备 token（令牌）
-
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         // 执行认证登陆
         try {
             subject.login(token);
-            System.out.println(subject.getPrincipal());
         } catch (UnknownAccountException uae) {
             result.put("msg", "未知账户");
         } catch (IncorrectCredentialsException ice) {
@@ -45,9 +41,8 @@ public class LoginController {
             result.put("msg", "账户已锁定");
         } catch (ExcessiveAttemptsException eae) {
             result.put("msg", "用户名或密码错误次数过多");
-        } catch (AuthenticationException ae) {
-            result.put("msg", "密码不正确");
         }
+        // 若登录验证成功
         if (subject.isAuthenticated()) {
             result.put("msg", "登录成功");
             result.put("token", subject.getSession().getId());
